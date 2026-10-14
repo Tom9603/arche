@@ -1,0 +1,9 @@
+{
+  "name": "Arche",
+  "short_name": "Arche",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#07131B",
+  "theme_color": "#07131B",
+  "icons": [{ "src": "icon.png", "sizes": "512x512", "type": "image/png" }]
+}

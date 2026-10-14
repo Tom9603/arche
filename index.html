@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Arche">
+  <meta name="theme-color" content="#07131B">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>Arche</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #07131B; overflow: hidden; overscroll-behavior: none;
+      -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+    #c { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; height: 100dvh; display: block; touch-action: none; outline: none; background: #07131B; }
+    #load { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #F2F5F4; font: 500 14px -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+      background: radial-gradient(120% 80% at 50% 30%, #12394A 0%, #07131B 70%); transition: opacity .5s; }
+    .title { font-size: 30px; font-weight: 600; letter-spacing: 12px; margin-left: 12px; }
+    .sub { margin-top: 10px; opacity: .55; font-size: 12px; letter-spacing: 2px; }
+    .bar { width: 170px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.12); margin-top: 34px; overflow: hidden; }
+    .fill { height: 100%; width: 0; background: #FFC870; border-radius: 2px; transition: width .25s; }
+    .tip { position: absolute; left: 28px; right: 28px; bottom: 44px; text-align: center; font-size: 12.5px; line-height: 1.55; opacity: .62; }
+    .err { display: none; margin: 24px 28px 0; text-align: center; color: #FF9C8F; font-size: 13px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <canvas id="c" tabindex="-1"></canvas>
+  <div id="load">
+    <div class="title">ARCHE</div>
+    <div class="sub">L'ABRI SOUS LA MER</div>
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <div class="err" id="err"></div>
+    <div class="tip" id="tip">Astuce : dans Safari, touche <b>Partager</b> puis <b>« Sur l'écran d'accueil »</b> pour jouer en plein écran, comme une app.</div>
+  </div>
+  <script>
+    var standalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches;
+    if (standalone) document.getElementById('tip').style.display = 'none';
+    if (/Android/i.test(navigator.userAgent)) document.getElementById('tip').innerHTML = 'Astuce : menu <b>⋮</b> puis <b>« Ajouter à l\'écran d\'accueil »</b> pour jouer en plein écran.';
+
+    // keep the browser from scrolling, zooming or selecting while playing
+    ['gesturestart', 'gesturechange', 'dblclick', 'contextmenu'].forEach(function (t) {
+      document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false });
+    });
+    document.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
+
+    var canvas = document.getElementById('c');
+    var config = {
+      dataUrl: "Build/21f3785a06af93e868ab6da2a200a628.data.unityweb",
+      frameworkUrl: "Build/58308fa860cb6f0bc04a83bc116124f4.framework.js.unityweb",
+      codeUrl: "Build/9c4231961f11ffd42854edf2bf0df5b3.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "Arche",
+      productName: "Arche",
+      productVersion: "0.1.0",
+      devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+      matchWebGLToCanvasSize: true,
+    };
+
+    function fail(msg) {
+      var e = document.getElementById('err');
+      e.style.display = 'block';
+      e.textContent = 'Le jeu n\'a pas pu démarrer. ' + msg;
+    }
+
+    var script = document.createElement('script');
+    script.src = "Build/bae714d86e11870187bbf5ed03ce9bec.loader.js";
+    script.onload = function () {
+      createUnityInstance(canvas, config, function (p) {
+        document.getElementById('fill').style.width = Math.round(p * 100) + '%';
+      }).then(function () {
+        var l = document.getElementById('load');
+        l.style.opacity = 0;
+        setTimeout(function () { l.remove(); }, 600);
+        canvas.focus();
+      }).catch(function (m) { fail(m); });
+    };
+    script.onerror = function () { fail('Vérifie ta connexion puis recharge la page.'); };
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>
