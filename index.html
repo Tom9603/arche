@@ -49,9 +49,9 @@
 
     var canvas = document.getElementById('c');
     var config = {
-      dataUrl: "Build/8c39665a9649de79d939a876d1691b22.data.unityweb",
+      dataUrl: "Build/3ab2f0a2482208d77142c613ae26de4f.data.unityweb",
       frameworkUrl: "Build/58308fa860cb6f0bc04a83bc116124f4.framework.js.unityweb",
-      codeUrl: "Build/4bdd206df67fb488daf681c9575ce23b.wasm.unityweb",
+      codeUrl: "Build/88a9929f0293d3288cc4c9fe81b71cd8.wasm.unityweb",
       streamingAssetsUrl: "StreamingAssets",
       companyName: "Arche",
       productName: "Arche",
@@ -67,7 +67,7 @@
     }
 
     var script = document.createElement('script');
-    script.src = "Build/8635511f534eeca24485af3fa6536957.loader.js";
+    script.src = "Build/215f76d60922918321573699ebd99884.loader.js";
     script.onload = function () {
       createUnityInstance(canvas, config, function (p) {
         document.getElementById('fill').style.width = Math.round(p * 100) + '%';
